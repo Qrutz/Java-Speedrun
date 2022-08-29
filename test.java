@@ -206,3 +206,27 @@ class BinarySearch {
 
     }
 }
+
+
+class SumDigits {
+
+    public static int sumDigits(String a) {
+        // List<Character> list = new ArrayList<>();
+        int count = 0;
+
+        for (int i = 0; i < a.length(); i++) {
+
+            char caracter = a.charAt(i);
+            if (Character.isDigit(caracter)) {
+                count = count + (Integer.parseInt(String.valueOf(a.charAt(i))));
+            }
+        }
+        return count;
+
+    }
+
+    public static void main(String[] args) {
+        String f = "aa1bc2d3";
+        System.out.println(sumDigits(f));
+    }
+}
