@@ -230,3 +230,36 @@ class SumDigits {
         System.out.println(sumDigits(f));
     }
 }
+
+class ShiftLeft {
+    public static int[] shiftLeft(int[] arr) {
+        int[] copyarr = arr;
+
+        System.out.println(copyarr);
+        if (copyarr.length == 1) {
+            return copyarr;
+        } else {
+
+            for (int i = 0; i < 1; i++) {
+                int j, first;
+                first = copyarr[0];
+
+                for (j = 0; j < copyarr.length - 1; j++) {
+                    copyarr[j] = copyarr[j + 1];
+                }
+                copyarr[j] = first;
+            }
+
+            return copyarr;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] inpt = { 6, 2, 5, 3 };
+        int[] ot = shiftLeft(inpt);
+        for (int i = 0; i < ot.length; i++) {
+            System.out.println(ot[i]);
+        }
+
+    }
+}
