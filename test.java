@@ -263,3 +263,14 @@ class ShiftLeft {
 
     }
 }
+class Concat {
+    public int[] getConcatenation(int[] nums) {
+        int[] xd = new int[(nums.length)*2];
+        
+        for (int i = 0; i < nums.length; i++) {
+            xd[i] = nums[i];
+            xd[i+(nums.length)] = nums[i];
+        }
+        return xd;
+    }
+}
