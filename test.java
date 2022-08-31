@@ -311,3 +311,53 @@ class PascalsT {
 
     }
 }
+
+
+class FizzArray {
+    public static List<Integer> fizzArray(int a, int b) {
+        List<Integer> list1 = new ArrayList<>();
+        if (a == b) {
+            return new ArrayList<>();
+        } else {
+            for (int i = a; i < b; i++) {
+
+                list1.add(i);
+            }
+            return list1;
+        }
+
+    }
+
+    public static void main(String[] argv) {
+        System.out.print(fizzArray(5, 6));
+    }
+}
+
+class ThreeConsecutive {
+
+    public static Boolean threeConsecutive(List<Integer> a) {
+        int count = 0;
+        for (int i = 1; i < a.size(); i++) {
+            if (a.get(i - 1) == a.get(i) + -1) {
+                count = count + 1;
+                if (count == 2) {
+                    return true;
+                }
+            } else {
+                count = 0;
+            }
+
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        List<Integer> l1 = new ArrayList<>();
+        l1.add(1);
+        l1.add(2);
+        l1.add(4);
+        l1.add(5);
+
+        System.out.print(threeConsecutive(l1));
+    }
+}
