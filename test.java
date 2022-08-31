@@ -361,3 +361,273 @@ class ThreeConsecutive {
         System.out.print(threeConsecutive(l1));
     }
 }
+
+
+class Car {
+    String carName;
+    double carPrice;
+
+    public Car(String name, double d) {
+        carName = name;
+        carPrice = d;
+    }
+
+    public String getName() {
+        return carName;
+    }
+
+    public static void main(String[] args) {
+
+    }
+
+    public double getDailyPrice() {
+        return carPrice;
+    }
+
+    public double calculateRent(int days) {
+        return carPrice * days;
+    }
+}
+
+class CarRental {
+    public static void main(String[] args) {
+        Car car1 = new Car("Volvo", 210.50);
+        Car car2 = new Car("Ferrari", 550.00);
+
+        System.out.println(car1.getName() + " costs " + car1.getDailyPrice() +
+                " SEKs per day.");
+        System.out.println(car2.getName() + " costs " + car2.getDailyPrice() +
+                " SEKs per day.");
+
+        int days = 5; // this indicates how many days you will rent the car.
+        System.out.println(car1.getName() + " costs " + car1.calculateRent(days) +
+                " SEKs for " + days + " days.");
+    }
+}
+
+class BankAccount {
+    String AccountName;
+    double AccountBalance;
+
+    public BankAccount(String name, double balance) {
+        AccountName = name;
+        AccountBalance = balance;
+    }
+
+    public void withdraw(double d) {
+        AccountBalance = AccountBalance - d;
+    }
+
+    public void deposit(double d) {
+        AccountBalance = AccountBalance + d;
+    }
+
+    public void printBalance() {
+        System.out.print(AccountBalance);
+    }
+}
+
+class Bank {
+
+    public static void main(String[] args) {
+        BankAccount acc1 = new BankAccount("Eve", 1000.39);
+        BankAccount acc2 = new BankAccount("John", 500000.00);
+        BankAccount acc3 = new BankAccount("Mary", 12540000.99);
+
+        acc1.withdraw(500.00);
+        acc2.withdraw(500.00);
+        acc3.withdraw(500.00);
+
+        acc1.deposit(1500.00);
+
+        acc1.printBalance();
+
+    }
+}
+
+class Movie {
+    String title;
+    int year;
+    int length;
+    int likes;
+
+    public Movie(String t, int y, int l) {
+        title = t;
+        year = y;
+        length = l;
+        likes = 0;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getReleaseYear() {
+        return year;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void like() {
+        likes += 1;
+    }
+
+    public void dislike() {
+        if (likes == 0) {
+            return;
+        } else {
+            likes -= 1;
+        }
+    }
+
+}
+
+class Netflix {
+    public static void main(String[] args) {
+        Movie movie1 = new Movie("Harry Potter", 2013, 120);
+        movie1.like();
+        movie1.dislike();
+        System.out.print(movie1.likes);
+    }
+}
+
+class BattleField {
+
+    public static void getStats(Hero h) {
+        System.out.print("(" + h.getName() + "," + h.getHP() + "," + h.getMana() + ")");
+
+    }
+
+   
+
+    public static void main(String[] args) {
+        Skill iceMissile = new Skill("Ice Missile", 20, 3, "Ice");
+        Skill fireball = new Skill("Fire Ball", 60, 5, "Fire");
+        Skill atomicKick = new Skill("Atomic Kick", 35, 4, "Physical");
+
+        // fireball.useSkill();
+        // // Should print:
+        // // Fire Ball causes 60 damage. (costs 5 mana)
+
+        // iceMissile.useSkill();
+        // // Should print:
+        // // Ice Missile causes 20 damage. (costs 3 mana)
+
+        Hero Batman = new Hero("Batman");
+        Hero Deadpool = new Hero("Deadpool");
+        Hero Samus = new Hero("Samus");
+
+        Samus.takeDamage(50);
+        Deadpool.takeDamage(90);
+
+        Batman.useMana(50);
+
+        getStats(Batman);
+        getStats(Deadpool);
+        getStats(Samus);
+
+        Deadpool.heal(50);
+
+        Batman.useMana(60);
+
+        Samus.takeDamage(40);
+
+        getStats(Batman);
+        getStats(Deadpool);
+        getStats(Samus);
+
+        Samus.useMana(100);
+        Deadpool.takeDamage(80);
+        Batman.takeDamage(80);
+
+        getStats(Batman);
+        getStats(Deadpool);
+        getStats(Samus);
+
+    }
+}
+
+class Skill {
+    String skillName;
+    int damage;
+    int manacost;
+    String Elemental;
+
+    public Skill(String n, int dmg, int mana, String Element) {
+        skillName = n;
+        damage = dmg;
+        manacost = mana;
+        Elemental = Element;
+    }
+
+    public void useSkill() {
+        System.out.println(skillName + " causes " + damage + " of damage. (costs " + manacost + " mana)");
+    }
+}
+
+class Hero {
+    String name;
+    int HP;
+    int MP;
+
+    public Hero(String n) {
+        name = n;
+        HP = 100;
+        MP = 100;
+    }
+
+    public void attack(Hero targetHero, int damage){
+        MP = MP - 25;
+        targetHero.takeDamage(damage);
+    }
+
+    public void ultimateAbility(Hero targetHero) {
+        MP = MP - 70;
+        targetHero.takeDamage(80);
+    }
+
+    public void AOEAttack(Hero...heros) {
+        MP = MP - 40;
+        for (Hero i: heros){
+            i.takeDamage(30);
+        }
+
+    }
+
+    public void useMana(int i) {
+        MP = MP - i;
+        if (MP < 0) {
+            MP = 0;
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getHP() {
+        return HP;
+    }
+
+    public int getMana() {
+        return MP;
+    }
+
+    public void takeDamage(int dmg) {
+        HP = HP - dmg;
+        if (HP <= 0) {
+            System.out.println("I died!... But i regret nothing");
+        }
+
+    }
+
+    public void heal(int HealAmmount) {
+        HP = HP + HealAmmount;
+    }
+
+
+
+}
+
