@@ -630,4 +630,91 @@ class Hero {
 
 
 }
+public class Task1 {
+
+    public static void get2HighestAndLowest(int[] arr) {
+        int lowest = arr[0];
+        int secondLowest = arr[0];
+        int highest = arr[0];
+        int secondHighest = arr[0];
+
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] < lowest) {
+                secondLowest = lowest;
+                lowest = arr[i];
+
+            } else if (arr[i] < secondLowest) {
+                secondLowest = arr[i];
+            }
+            if (arr[i] > highest) {
+                secondHighest = highest;
+                highest = arr[i];
+            } else if (arr[i] > secondHighest) {
+                secondHighest = arr[i];
+            }
+        }
+        System.out.println(Arrays.toString(arr));
+
+        for (Integer p : arr) {
+            if ((p == lowest) || (p == highest)) {
+
+            }
+        }
+        System.out.printf("The two lowest scores provided are %s, and %s", lowest, secondLowest);
+        System.out.printf("\nThe two highest scores provided are %s, and %s", highest, secondHighest);
+    }
+
+    public static void getMean(int[] arr) {
+        Locale.setDefault(Locale.ENGLISH);
+
+        double sum = 0;
+        for (Integer i : arr) {
+            sum += i;
+        }
+
+        double average = sum / arr.length;
+
+        System.out.format("The mean of the numbers is %.2f%n", average);
+
+    }
+
+    public static void main(String[] args) {
+        try (Scanner input = new Scanner(System.in)) {
+            int[] out = new int[7];
+            int i = 1;
+            String ordinal;
+
+            do {
+                if (i == 1) {
+                    ordinal = "st";
+                } else if (i == 2) {
+                    ordinal = "nd";
+                } else if (i == 3) {
+                    ordinal = "rd";
+                } else {
+                    ordinal = "th";
+                }
+
+                System.out.print("Enter the Score for the " + i + ordinal + " student: ");
+                int score = input.nextInt();
+
+                if ((score <= 100) && (score >= 0)) {
+                    out[i - 1] = score;
+                    i += 1;
+                } else {
+                    System.out.println("Error - Input out of bound. Score can only be between 0 and 100");
+                    continue;
+                }
+
+            } while (i <= out.length);
+
+            System.out.println("Thank you for your input. Your entered scores are: ");
+            System.out.println(Arrays.toString(out));
+            getMean(out);
+            get2HighestAndLowest(out);
+        }
+    }
+}
+
+
 
