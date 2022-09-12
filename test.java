@@ -630,38 +630,67 @@ class Hero {
 
 
 }
-public class Task1 {
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.Scanner;
 
-    public static void get2HighestAndLowest(int[] arr) {
-        int lowest = arr[0];
-        int secondLowest = arr[0];
+public class Assignment1 {
+
+    public static void hashtagCollector() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Type your post: ");
+        String s = sc.nextLine();
+        String[] splitted = s.split(" ");
+        String stringOfHashtagWords = "";
+
+        for (String word : splitted) {
+            if (word.charAt(0) == '#') {
+                stringOfHashtagWords += word;
+                stringOfHashtagWords += " ";
+            }
+        }
+        if (stringOfHashtagWords == "") {
+            System.out.println("\nNo hashtags were typed");
+        } else {
+            System.out.println("\nHashtags found: " + stringOfHashtagWords);
+        }
+    }
+
+    public static void highestScoreAndItsPos(int[] arr) {
         int highest = arr[0];
-        int secondHighest = arr[0];
+        int indexOfHighest = 0;
 
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] < lowest) {
-                secondLowest = lowest;
-                lowest = arr[i];
-
-            } else if (arr[i] < secondLowest) {
-                secondLowest = arr[i];
-            }
             if (arr[i] > highest) {
-                secondHighest = highest;
                 highest = arr[i];
-            } else if (arr[i] > secondHighest) {
-                secondHighest = arr[i];
+                indexOfHighest = i;
             }
         }
-        System.out.println(Arrays.toString(arr));
+        System.out.printf("\nThe highest score is %s and belongs to the %s%s student", highest, indexOfHighest,
+                getOrdinal(indexOfHighest));
 
-        for (Integer p : arr) {
-            if ((p == lowest) || (p == highest)) {
+    }
 
+    public static void get2HighestAndLowest(int[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
             }
         }
-        System.out.printf("The two lowest scores provided are %s, and %s", lowest, secondLowest);
-        System.out.printf("\nThe two highest scores provided are %s, and %s", highest, secondHighest);
+
+        int lowest = arr[0];
+        int secondLowest = arr[1];
+        int highest = arr[arr.length - 1];
+        int secondHighest = arr[arr.length - 2];
+
+        System.out.printf("The two lowest scores provided are %s, and %s", lowest,
+                secondLowest);
+        System.out.printf("\nThe two highest scores provided are %s, and %s\n",
+                highest, secondHighest);
     }
 
     public static void getMean(int[] arr) {
@@ -678,41 +707,86 @@ public class Task1 {
 
     }
 
-    public static void main(String[] args) {
-        try (Scanner input = new Scanner(System.in)) {
-            int[] out = new int[7];
-            int i = 1;
-            String ordinal;
-
-            do {
-                if (i == 1) {
-                    ordinal = "st";
-                } else if (i == 2) {
-                    ordinal = "nd";
-                } else if (i == 3) {
-                    ordinal = "rd";
-                } else {
-                    ordinal = "th";
-                }
-
-                System.out.print("Enter the Score for the " + i + ordinal + " student: ");
-                int score = input.nextInt();
-
-                if ((score <= 100) && (score >= 0)) {
-                    out[i - 1] = score;
-                    i += 1;
-                } else {
-                    System.out.println("Error - Input out of bound. Score can only be between 0 and 100");
-                    continue;
-                }
-
-            } while (i <= out.length);
-
-            System.out.println("Thank you for your input. Your entered scores are: ");
-            System.out.println(Arrays.toString(out));
-            getMean(out);
-            get2HighestAndLowest(out);
+    public static String getOrdinal(int n) {
+        String ordinal;
+        if (n == 1) {
+            ordinal = "st";
+        } else if (n == 2) {
+            ordinal = "nd";
+        } else if (n == 3) {
+            ordinal = "rd";
+        } else {
+            ordinal = "th";
         }
+        return ordinal;
+    }
+
+    public static int[] getScores() {
+        Scanner input = new Scanner(System.in);
+        int[] out = new int[7];
+        int i = 1;
+
+        do {
+
+            System.out.print("Enter the Score for the " + i + getOrdinal(i) + " student: ");
+            int score = input.nextInt();
+
+            if ((score <= 100) && (score >= 0)) {
+                out[i - 1] = score;
+                i += 1;
+            } else {
+                System.out.println("Error - Input out of bound. Score can only be between 0 and 100");
+                continue;
+            }
+
+        } while (i <= out.length);
+
+        System.out.println("Thank you for your input. Your entered scores are: ");
+        System.out.println(Arrays.toString(out));
+        return out;
+    }
+
+    public static void main(String[] args) {
+
+        boolean on = true;
+
+        int[] o = getScores();
+
+        Scanner n = new Scanner(System.in);
+        int option;
+
+        do {
+
+            System.out.println("Welcome to the menu. Choose one of the options below:");
+            System.out.println("  1. Register new scores for students.");
+            System.out.println("  2. Calculate the mean of the entered scores");
+            System.out.println("  3. Find the two highest and two lowest scores");
+            System.out.println("  4. Find the highest score and its position.");
+            System.out.println("  5. Collect hashtags from a post.");
+            System.out.println("  6. To exit");
+
+            System.out.print("Type your option: ");
+            option = n.nextInt();
+
+            if (option == 1) {
+                o = getScores();
+            } else if (option == 2) {
+                getMean(o);
+            } else if (option == 3) {
+                get2HighestAndLowest(o);
+            } else if (option == 4) {
+                highestScoreAndItsPos(o);
+            } else if (option == 5) {
+                hashtagCollector();
+            } else if (option == 6) {
+                System.out.println("Thank you for using our grading system. Have a nice day!");
+                break;
+            } else {
+                System.out.println("Error - Invalid value. Please type between 1 and 6");
+            }
+
+        } while (true);
+
     }
 }
 
