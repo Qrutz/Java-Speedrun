@@ -1,0 +1,376 @@
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
+class Main {
+
+    public static void main(String[] args) {
+        //
+    }
+}
+
+class Pokemon {
+
+    String name;
+    int MaxHP;
+    int HP;
+    int EP = 100;
+    Skill s;
+    String type;
+
+    public Pokemon(String name, int MaxHP, String type) {
+        this.name = name;
+        this.MaxHP = MaxHP;
+        HP = this.MaxHP;
+        this.type = type;
+
+    }
+
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Pokemon)) {
+            return false;
+        }
+        Pokemon pokemon = (Pokemon) o;
+        return name.equals(pokemon.name) && MaxHP == pokemon.MaxHP && HP == pokemon.HP && EP == pokemon.EP
+                && type.equals(pokemon.type);
+    }
+
+    public void changeName(String newName) {
+        name = newName;
+    }
+
+    public String getNameAndType() {
+        return getName() + " (" + getType() + ")";
+    }
+
+    public int getCurrentHP() {
+        return HP;
+    }
+
+    public int getEnergy() {
+        return EP;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean knowsSkill() {
+        return s != null;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getMAX_HP() {
+        return MaxHP;
+    }
+
+    public void learnSkill(String name, int damage, int energyCost) {
+        s = new Skill(name, damage, energyCost);
+    }
+
+    public void forgetSkill() {
+        s = null;
+    }
+
+    public boolean hasSkill() {
+        return s != null;
+    }
+
+    public String useItem(Item i) {
+        if (HP == MaxHP) {
+            return getName() + " could not use " + i.getName() + ". HP is already full.";
+        }
+        HP += i.getHealingAmount();
+        int healingAmount = i.getHealingAmount();
+        if (HP > MaxHP) {
+            healingAmount = healingAmount - (HP - MaxHP);
+            HP = MaxHP;
+        }
+
+        return getName() + " used " + i.getName() + ". " + "It healed " + healingAmount + " HP.";
+    }
+
+    public void takeDamage(int damage) {
+        if (HP - damage < 0) {
+            HP = 0;
+        } else {
+            HP -= damage;
+        }
+    }
+
+    public String toString() {
+        if (hasSkill()) {
+            return getNameAndType() + ". Knows" + " " + s.toString();
+        } else {
+            return getName() + " (" + getType() + ")";
+        }
+    }
+
+    public void rest() {
+        if (HP + 20 > MaxHP) {
+            HP = MaxHP;
+        } else if (HP == 0) {
+            HP = 0;
+        } else {
+            HP += 20;
+        }
+    }
+
+    public void useEnergy(int energy) {
+        if (EP - energy < 0) {
+            EP = 0;
+        } else {
+            EP -= energy;
+        }
+    }
+
+    public void recoverEnergy() {
+        if (HP == 0) {
+            System.out.println("pokemon is fainted");
+        } else if (EP + 20 > 100) {
+            EP = 100;
+        } else {
+            EP += 25;
+        }
+    }
+
+    public String attack(Pokemon x) {
+        if (hasSkill()) {
+            if (EP >= s.getEnergyCost()) {
+                useEnergy(s.getEnergyCost());
+            } else {
+                System.out.print("not enough energy");
+                return "";
+            }
+        } else {
+            System.out.print("pokemon does not know a skill");
+            return "";
+        }
+        switch (type) {
+            case "Fire":
+                if (x.type == "Fire") {
+                    x.takeDamage(this.s.AP);
+                } else if (x.type == "Water") {
+                    x.takeDamage(this.s.AP / 2);
+                    return this.name + " uses " + this.s.name + " on " + x.name + ". " + "It is not very effective...\n"
+                            + x.name + " has " + x.HP
+                            + " HP left." + (x.HP == 0 ? " " + x.name + " faints." : "");
+                } else if (x.type == "Grass") {
+                    x.takeDamage(this.s.AP * 2);
+                    return this.name + " uses " + this.s.name + " on " + x.name + ". " + "It is super effective!\n"
+                            + x.name + " has " + x.HP
+                            + " HP left." + (x.HP == 0 ? " " + x.name + " faints." : "");
+                } else if (x.type == "Normal") {
+                    x.takeDamage(this.s.AP);
+                }
+                break;
+            case "Water":
+                if (x.type == "Fire") {
+                    x.takeDamage(this.s.AP * 2);
+                    return this.name + " uses " + this.s.name + " on " + x.name + ". " + "It is super effective!\n"
+                            + x.name + " has " + x.HP
+                            + " HP left." + (x.HP == 0 ? " " + x.name + " faints." : "");
+                } else if (x.type == "Water") {
+                    x.takeDamage(this.s.AP / 2);
+                    return this.name + " uses " + this.s.name + " on " + x.name + ". " + "It is not very effective...\n"
+                            + x.name + " has " + x.HP
+                            + " HP left." + (x.HP == 0 ? " " + x.name + " faints." : "");
+                } else if (x.type == "Grass") {
+                    x.takeDamage(this.s.AP / 2);
+                    return this.name + " uses " + this.s.name + " on " + x.name + ". " + "It is not very effective...\n"
+                            + x.name + " has " + x.HP
+                            + " HP left." + (x.HP == 0 ? " " + x.name + " faints." : "");
+                } else if (x.type == "Normal") {
+                    x.takeDamage(this.s.AP);
+                }
+                break;
+            case "Grass":
+                if (x.type == "Fire") {
+                    x.takeDamage(this.s.AP / 2);
+                    return this.name + " uses " + this.s.name + " on " + x.name + ". " + "It is not very effective...\n"
+                            + x.name + " has " + x.HP
+                            + " HP left.";
+                } else if (x.type == "Water") {
+                    x.takeDamage(this.s.AP * 2);
+                    return this.name + " uses " + this.s.name + " on " + x.name + ". " + "It is super effective!\n"
+                            + x.name + " has " + x.HP
+                            + " HP left.";
+                } else if (x.type == "Grass") {
+                    x.takeDamage(this.s.AP);
+                } else if (x.type == "Normal") {
+                    x.takeDamage(this.s.AP);
+                }
+                break;
+
+            case "Normal":
+                if (x.type == "Fire" || x.type == "Water" || x.type == "Grass" || x.type == "Normal") {
+                    x.takeDamage(this.s.AP);
+
+                }
+                break;
+        }
+        System.out.println(x.HP);
+        return (this.name + " uses " + this.s.name + " on " + x.name + "." + "\n" + x.name + " has " + x.HP
+                + " HP left.") + (x.HP == 0 ? " " + x.name + " faints." : "");
+    }
+}
+
+class Skill {
+
+    String name;
+    int AP;
+    int EC;
+
+    public Skill(String name, int AP, int EC) {
+        this.name = name;
+        this.AP = AP;
+        this.EC = EC;
+    }
+
+    public String toString() {
+        return name + " - AP: " + AP + " EC: " + EC;
+    }
+
+    public int getEnergyCost() {
+        return EC;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getDamage() {
+        return AP;
+    }
+}
+
+class Item {
+    String name;
+    int HealingPower;
+    Double weight;
+
+    public Item(String name, int HealingPower, Double weight) {
+        this.name = name;
+        this.HealingPower = HealingPower;
+        this.weight = weight;
+    }
+
+    public String truncateDecimal(Double weight) {
+        if (weight % 1 == 0) {
+            String wholeNumber = String.format("%.2f", weight);
+            return wholeNumber;
+        } else {
+            DecimalFormat df = new DecimalFormat("#.##");
+            df.setRoundingMode(RoundingMode.DOWN);
+            String w = df.format(weight);
+            return w;
+        }
+
+    }
+
+    public boolean equals(Object o) {
+        if (o instanceof Item) {
+            Item i = (Item) o;
+            return name.equals(i.name) && HealingPower == i.HealingPower
+                    && weight.equals(i.weight);
+        }
+        return false;
+    }
+
+    public String toString() {
+        return name + " heals " + HealingPower + " HP" + ". (" + truncateDecimal(weight) + ")";
+    }
+
+    public int getHealingAmount() {
+        return HealingPower;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+}
+
+class ItemBag {
+    Double maxWeight;
+    ArrayList<Item> items = new ArrayList<Item>();
+
+    public ItemBag(Double maxWeight) {
+        this.maxWeight = maxWeight;
+    }
+
+    public int getNumOfItems() {
+        if (items == null) {
+            return 0;
+        } else {
+            return items.size();
+        }
+    }
+
+    public Double getMaxWeight() {
+        return maxWeight;
+    }
+
+    public Double getCurrentWeight() {
+        Double currentWeight = 0.0;
+        for (Item i : items) {
+            currentWeight += i.getWeight();
+        }
+        return currentWeight;
+    }
+
+    public int addItem(Item i) {
+
+        if (i.getWeight() + getCurrentWeight() > maxWeight) {
+            return -1;
+        } else {
+            items.add(i);
+            for (int j = 0; j < items.size(); j++) {
+                for (int k = 0; k < items.size() - 1; k++) {
+                    if (items.get(k).getWeight() < items.get(k + 1).getWeight()) {
+                        Item temp = items.get(k);
+                        items.set(k, items.get(k + 1));
+                        items.set(k + 1, temp);
+                    }
+                }
+            }
+            return items.indexOf(i);
+        }
+
+    }
+
+    public Item removeItemAt(int index) {
+        if (index < 0 || index >= items.size()) {
+            return null;
+        }
+        Item i = items.get(index);
+        items.remove(index);
+        return i;
+
+    }
+
+    public String peekItemAt(int index) {
+        if (index < 0 || index >= items.size()) {
+            return "";
+        } else {
+            return items.get(index).toString();
+        }
+    }
+
+    public Item popItem() {
+        if (this.items.size() == 0) {
+            return null;
+        }
+        Item i = this.items.get(0);
+        this.items.remove(0);
+        return i;
+    }
+}
